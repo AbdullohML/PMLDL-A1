@@ -6,4 +6,4 @@ __pycache__/
 mlruns/
 mlflow.db
 
-models/*.pkl
+pipeline.log

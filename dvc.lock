@@ -1,0 +1,69 @@
+schema: '2.0'
+stages:
+  process:
+    cmd: python code/datasets/process_data.py
+    deps:
+    - path: code/datasets/process_data.py
+      hash: md5
+      md5: c369f628d03c8ab86dc2aabf2980c791
+      size: 1120
+    - path: data/raw/california_housing.csv
+      hash: md5
+      md5: ca5b757f0729c68d74d05bf9d9ca8486
+      size: 1895154
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 954e048f02e1668cbe2975b986f28dc8
+      size: 297397
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 3c3d7c5e821cce413713aeac408efbcf
+      size: 1189553
+  train:
+    cmd: python code/models/train.py
+    deps:
+    - path: code/models/train.py
+      hash: md5
+      md5: f71b229857bc2e7ce17ac7f38f333237
+      size: 1695
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 954e048f02e1668cbe2975b986f28dc8
+      size: 297397
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 3c3d7c5e821cce413713aeac408efbcf
+      size: 1189553
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 0db5a9b803b1af24c37f0fb3136bda9d
+      size: 117451489
+  deploy:
+    cmd: sudo docker compose -f code/deployment/docker-compose.yml up -d --build
+    deps:
+    - path: code/deployment/api/Dockerfile
+      hash: md5
+      md5: 44a510b837bf37c34cc20f014a77320e
+      size: 293
+    - path: code/deployment/api/main.py
+      hash: md5
+      md5: 8c542966bb5f335f255b6b908f2d5a43
+      size: 792
+    - path: code/deployment/app/Dockerfile
+      hash: md5
+      md5: 9b99bcfeef479234d4d288903e6426a9
+      size: 233
+    - path: code/deployment/app/app.py
+      hash: md5
+      md5: a6b4d30abee55a4c8f58db835c403c13
+      size: 1404
+    - path: code/deployment/docker-compose.yml
+      hash: md5
+      md5: ebd6dfaaffaf1b6ce43b542ed59c1ee7
+      size: 325
+    - path: models/model.pkl
+      hash: md5
+      md5: 0db5a9b803b1af24c37f0fb3136bda9d
+      size: 117451489
